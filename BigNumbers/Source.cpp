@@ -1,28 +1,23 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
+#include "BigNumber.h"
 using namespace std;
+
+
+
 
 int main()
 {
-	char num = cin.get();
-	vector <int> vectorNumber;
-	while (num!='\n')
-	{
-		vectorNumber.push_back(atoi(&num));
-		num = cin.get();
-	}
-	
 
+	BigNumber num1("15512532895192679275923");
+	num1.showVector();
 
+	BigNumber num2("9948249852992958");
+	num2.showVector();
 
-	vector <int>::iterator it = vectorNumber.begin();
-	while (it != vectorNumber.end())
-	{
-		cout << *it++ << endl;
-	}
-
+	BigNumber num3 = num1 + num2;
+	num3.showVector();
 	return 0;
 }
 
