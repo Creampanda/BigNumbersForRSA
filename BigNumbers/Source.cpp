@@ -10,17 +10,24 @@ using namespace std;
 int main()
 {
 
-	BigNumber num1("77214215125154316137");
+	BigNumber num1("22");
 	num1.showVector();
 
-	BigNumber num2("2125124523156124643162");
+	BigNumber num2("20");
 	num2.showVector();
 
-	BigNumber num3 = num1 + num2;
-	num3.showVector();
+	num1--;
+	num1.showVector();
+	--num2;
+	num2.showVector();
 
-	BigNumber num4 = num1 * num2;
-	num4.showVector();
+	num1++;
+	num1.showVector();
+	++num2;
+	num2.showVector();
+
+
+
 
 	return 0;
 }
