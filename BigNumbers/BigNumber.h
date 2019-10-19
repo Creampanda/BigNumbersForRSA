@@ -7,13 +7,13 @@ public:
 	explicit BigNumber(const vector<int> vectorNum): vectorNumber_(vectorNum) {};
 	~BigNumber();
 
-	void showVector();
-
 	BigNumber(const BigNumber& other) : vectorNumber_(other.vectorNumber_) {};
 
 	BigNumber operator+(const BigNumber& other);
+	BigNumber operator-(const BigNumber& other);
 
 	BigNumber operator*(const BigNumber& other);
+	BigNumber operator*(int value);
 
 	BigNumber & operator--();
 
@@ -21,8 +21,17 @@ public:
 
 	BigNumber operator--(int);
 	
-
 	BigNumber operator++(int);
+	
+	bool operator>(const BigNumber& other);
+	bool operator>=(const BigNumber& other);
+	bool operator<(const BigNumber& other);
+	bool operator<=(const BigNumber& other);
+
+	void showVector();
+	void showNumber();
+
+	void toPower(int value);
 
 
 private:

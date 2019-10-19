@@ -33,8 +33,30 @@ void BigNumber::showVector()
 		cout << *it++ << " ";
 	}
 	cout << endl;
-	
+}
 
+void BigNumber::showNumber()
+{
+	vector <int>::iterator itr = vectorNumber_.end();
+	cout << "Number: " << endl;
+	while (itr != vectorNumber_.begin())
+	{
+		cout << *--itr;
+	}
+	cout << endl;
+}
+
+
+
+
+
+void BigNumber::toPower(int value)
+{
+	BigNumber temp = (*this);
+	for (size_t i = 1; i < value; i++)
+	{
+		(*this) = temp * (*this);
+	}
 }
 
 
@@ -97,6 +119,53 @@ BigNumber BigNumber::operator+(const BigNumber &other)
 		return temp;
 }
 
+BigNumber BigNumber::operator-(const BigNumber& other)
+{
+	vector<int> vectorResult(this->vectorNumber_.size(), 0);
+	if (*this < other)
+	{
+		cout << "Substraction impossible" << endl;
+		return *this;
+	}
+
+
+	BigNumber tempQ(*this);
+
+	for (size_t i = 0; i < this->vectorNumber_.size(); i++)
+	{
+		if (i >= other.vectorNumber_.size())
+			vectorResult[i] = this->vectorNumber_[i];
+		else
+		{
+			if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			{
+				size_t j = i + 1;
+				while (this->vectorNumber_[j] == 0)
+					j++;
+				for (size_t q = j; q != i; q--)
+				{
+					this->vectorNumber_[q]--;
+					this->vectorNumber_[q - 1] += 10;
+				}
+			}
+
+			vectorResult[i] = this->vectorNumber_[i] - other.vectorNumber_[i];
+		}
+	}
+	for (size_t i = 0; i < vectorResult.size() - 1; i++)
+	{
+		vectorResult[i + 1] += vectorResult[i] / 10;
+		vectorResult[i] %= 10;
+	}
+
+	while (vectorResult.back() == 0)
+		vectorResult.pop_back();
+
+	BigNumber temp(vectorResult);
+	*this = tempQ;
+	return temp;
+}
+
 BigNumber BigNumber::operator*(const BigNumber& other)
 {
 
@@ -141,6 +210,31 @@ BigNumber BigNumber::operator*(const BigNumber& other)
 
 	return temp;
 
+}
+
+BigNumber BigNumber::operator*(int value)
+{
+	if (value < 0 || value > 9)
+	{
+		return *this;
+	}
+		vector<int> vectorResult(this->vectorNumber_.size() + 2, 0);
+				for (size_t i = 0; i < this->vectorNumber_.size(); i++)
+					vectorResult[i] = vectorResult[i] + value * this->vectorNumber_[i];
+
+			for (size_t i = 0; i < vectorResult.size() - 1; i++)
+			{
+				vectorResult[i + 1] += vectorResult[i] / 10;
+				vectorResult[i] %= 10;
+			}
+
+
+		while (vectorResult.back() == 0)
+			vectorResult.pop_back();
+
+		BigNumber temp(vectorResult);
+
+		return temp;
 }
 
 BigNumber & BigNumber::operator--()
@@ -196,4 +290,72 @@ BigNumber BigNumber::operator++(int)
 
 	return temp;
 }
+bool BigNumber::operator>(const BigNumber& other)
+{
+	if (this->vectorNumber_.size() > other.vectorNumber_.size())
+		return true;
+	if (this->vectorNumber_.size() < other.vectorNumber_.size())
+		return false;
+	for (size_t i = this->vectorNumber_.size(); i !=0;)
+	{
+		--i;
+		if (this->vectorNumber_[i] > other.vectorNumber_[i])
+			return true;
+		if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			return false;
+	}
+	return false;
+}
+
+bool BigNumber::operator>=(const BigNumber& other)
+{
+	if (this->vectorNumber_.size() > other.vectorNumber_.size())
+		return true;
+	if (this->vectorNumber_.size() < other.vectorNumber_.size())
+		return false;
+	for (size_t i = this->vectorNumber_.size(); i != 0;)
+	{
+		--i;
+		if (this->vectorNumber_[i] > other.vectorNumber_[i])
+			return true;
+		if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			return false;
+	}
+	return true;
+}
+
+bool BigNumber::operator<(const BigNumber& other)
+{
+	if (this->vectorNumber_.size() < other.vectorNumber_.size())
+		return true;
+	if (this->vectorNumber_.size() > other.vectorNumber_.size())
+		return false;
+	for (size_t i = this->vectorNumber_.size(); i != 0;)
+	{
+		--i;
+		if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			return true;
+		if (this->vectorNumber_[i] > other.vectorNumber_[i])
+			return false;
+	}
+	return false;
+}
+
+bool BigNumber::operator<=(const BigNumber& other)
+{
+	if (this->vectorNumber_.size() < other.vectorNumber_.size())
+		return true;
+	if (this->vectorNumber_.size() > other.vectorNumber_.size())
+		return false;
+	for (size_t i = this->vectorNumber_.size(); i != 0;)
+	{
+		--i;
+		if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			return true;
+		if (this->vectorNumber_[i] > other.vectorNumber_[i])
+			return false;
+	}
+	return true;
+}
+
 
