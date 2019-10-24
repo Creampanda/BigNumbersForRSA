@@ -212,6 +212,84 @@ BigNumber BigNumber::operator*(const BigNumber& other)
 
 }
 
+BigNumber BigNumber::operator/(const BigNumber& other)
+ {
+	if (*this < other)
+	{
+		vector<int> vectorDIV(1, 0);
+		BigNumber temp(vectorDIV);
+		return temp;
+	}
+	if (*this == other)
+	{
+		vector<int> vectorDIV(1, 1);
+		BigNumber temp(vectorDIV);
+		return temp;
+	}
+	vector<int> vectorDIV(0);
+	vector<int> vectorDIVresult(0);
+	BigNumber temp(vectorDIV);
+	
+	vector<int>::iterator it = this->vectorNumber_.end();
+	while (it!= this->vectorNumber_.begin())
+	{
+		while (temp < other)
+		{
+			temp.vectorNumber_.insert(temp.vectorNumber_.begin() ,*--it);
+		}
+
+		int t = 0;
+		while (temp > other)
+		{
+			temp = temp - other;
+			t++;
+		}
+		vectorDIVresult.insert(vectorDIVresult.begin(),t);
+
+
+	}
+	BigNumber temp2(vectorDIVresult);
+
+	return temp2;
+}
+
+BigNumber BigNumber::operator %(const BigNumber& other)
+{
+	if (*this < other)
+	{
+		return *this;
+	}
+	if (*this == other)
+	{
+		vector<int> vectorDIV(1,0);
+		BigNumber temp(vectorDIV);
+		return temp;
+	}
+	vector<int> vectorDIV(0);
+	vector<int> vectorDIVresult(0);
+	BigNumber temp(vectorDIV);
+
+	vector<int>::iterator it = this->vectorNumber_.end();
+	while (it != this->vectorNumber_.begin())
+	{
+		while (temp < other)
+		{
+			temp.vectorNumber_.insert(temp.vectorNumber_.begin(), *--it);
+		}
+
+		int t = 0;
+		while (temp > other)
+		{
+			temp = temp - other;
+			t++;
+		}
+		vectorDIVresult.insert(vectorDIVresult.begin(), t);
+
+
+	}
+	return temp;
+}
+
 BigNumber BigNumber::operator*(int value)
 {
 	if (value < 0 || value > 9)
@@ -289,6 +367,24 @@ BigNumber BigNumber::operator++(int)
 	}
 
 	return temp;
+}
+bool BigNumber::operator==(const BigNumber& other)
+{
+	if (this->vectorNumber_.size() == other.vectorNumber_.size())
+	{
+		for (size_t i = this->vectorNumber_.size(); i != 0;)
+		{
+			--i;
+			if (this->vectorNumber_[i] != other.vectorNumber_[i])
+				return false;
+		}
+		return true;
+	}
+	return false;
+}
+bool BigNumber::operator!=(const BigNumber& other)
+{
+	return !(*this == other);
 }
 bool BigNumber::operator>(const BigNumber& other)
 {

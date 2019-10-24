@@ -13,6 +13,10 @@ public:
 	BigNumber operator-(const BigNumber& other);
 
 	BigNumber operator*(const BigNumber& other);
+	BigNumber operator/(const BigNumber& other);
+
+	BigNumber operator %(const BigNumber& other);
+
 	BigNumber operator*(int value);
 
 	BigNumber & operator--();
@@ -23,6 +27,8 @@ public:
 	
 	BigNumber operator++(int);
 	
+	bool operator==(const BigNumber& other);
+	bool operator!=(const BigNumber& other);
 	bool operator>(const BigNumber& other);
 	bool operator>=(const BigNumber& other);
 	bool operator<(const BigNumber& other);
