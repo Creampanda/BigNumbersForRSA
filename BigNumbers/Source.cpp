@@ -2,25 +2,24 @@
 #include <string>
 #include <vector>
 #include "BigNumber.h"
-#include "Source.h"
 using namespace std;
 
 
 int main()
 {
 
-	BigNumber num1("3");
+	BigNumber num1("666");
 	
-	BigNumber num2("4");
+	BigNumber num2("2014");
+	BigNumber num3 = num1.modPow(777,"2014");
 
+	//BigNumber num3 = num2 % num1;
 
-	BigNumber num3 = num1%num2;
-
-	num1.showVector();
-	num2.showVector();
-	num3.showVector();
-
+	num1.showNumber();
+	num3.showNumber();
 	
+	
+
 	return 0;
 }
 

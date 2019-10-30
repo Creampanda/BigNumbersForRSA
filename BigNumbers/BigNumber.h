@@ -9,8 +9,11 @@ public:
 
 	BigNumber(const BigNumber& other) : vectorNumber_(other.vectorNumber_) {};
 
+	BigNumber & operator=(const BigNumber& other);
+
 	BigNumber operator+(const BigNumber& other);
 	BigNumber operator-(const BigNumber& other);
+
 
 	BigNumber operator*(const BigNumber& other);
 	BigNumber operator/(const BigNumber& other);
@@ -39,6 +42,7 @@ public:
 
 	void toPower(int value);
 
+	BigNumber modPow(int exp, const string modul);
 
 private:
 	vector <int> vectorNumber_;

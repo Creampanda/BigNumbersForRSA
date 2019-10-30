@@ -52,14 +52,42 @@ void BigNumber::showNumber()
 
 void BigNumber::toPower(int value)
 {
-	BigNumber temp = (*this);
+	BigNumber temp(*this);
 	for (size_t i = 1; i < value; i++)
 	{
 		(*this) = temp * (*this);
 	}
 }
 
+BigNumber BigNumber::modPow(int exp, const string modul)
+{
+	
+	if (modul == "1")
+	{
+		BigNumber temp("0");
+		return temp;
+	}
+	BigNumber temp("1");
+	BigNumber modl(modul);
+	for (size_t i = 0; i != exp ; i++)
+	{
+		temp = (temp * (*this));
+		if (temp > modl)
+			temp = temp % modl;
+	}
+	return temp;
+}
 
+
+
+BigNumber & BigNumber::operator=(const BigNumber& other)
+{
+	if (this != &other)
+	{
+		this->vectorNumber_ = other.vectorNumber_;
+	}
+	return *this;
+}
 
 BigNumber BigNumber::operator+(const BigNumber &other)
 {
@@ -270,9 +298,9 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 	BigNumber temp(vectorDIV);
 
 	vector<int>::iterator it = this->vectorNumber_.end();
-	while (it != this->vectorNumber_.begin())
+	while (it != this->vectorNumber_.begin() )
 	{
-		while (temp < other)
+		while (temp < other && it != this->vectorNumber_.begin())
 		{
 			temp.vectorNumber_.insert(temp.vectorNumber_.begin(), *--it);
 		}
