@@ -4,22 +4,41 @@
 #include "BigNumber.h"
 using namespace std;
 
+BigNumber gcd(BigNumber a, BigNumber b)
+{
+	BigNumber q = a / b;
+	BigNumber r = a % b;
+	BigNumber nul("0");
+	while (r != nul)
+	{
+		a = b;
+		b = r;
+		q = a / b;
+		r = a % b;
+	}
+	return b;
+}
+
+void evkl(int a, int b)
+{
+	static int x = 0;
+	static int y = 1;
+	int temp;
+	if (a == 0)
+	{
+		return;
+	}
+	evkl(b%a, a);
+	temp = x;
+	x = y - (b / a) * x;
+	y = temp;
+	cout << x << "  " << y << endl;
+}
 
 int main()
 {
-
-	BigNumber num1("666");
-	
-	BigNumber num2("2014");
-	BigNumber num3 = num1.modPow(777,"2014");
-
-	//BigNumber num3 = num2 % num1;
-
-	num1.showNumber();
-	num3.showNumber();
-	
-	
-
+	evkl(3, 9167368);
+	cout << -3055789 + 9167368;
 	return 0;
 }
 

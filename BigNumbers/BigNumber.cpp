@@ -26,7 +26,7 @@ BigNumber::~BigNumber()
 
 void BigNumber::showVector()
 {
-	vector <int>::iterator it = vectorNumber_.begin();
+	vector <short int>::iterator it = vectorNumber_.begin();
 	cout << "Vector: " << endl;
 	while (it != vectorNumber_.end())
 	{
@@ -37,7 +37,7 @@ void BigNumber::showVector()
 
 void BigNumber::showNumber()
 {
-	vector <int>::iterator itr = vectorNumber_.end();
+	vector <short int>::iterator itr = vectorNumber_.end();
 	cout << "Number: " << endl;
 	while (itr != vectorNumber_.begin())
 	{
@@ -50,7 +50,7 @@ void BigNumber::showNumber()
 
 
 
-void BigNumber::toPower(int value)
+void BigNumber::toPower(short int value)
 {
 	BigNumber temp(*this);
 	for (size_t i = 1; i < value; i++)
@@ -59,7 +59,7 @@ void BigNumber::toPower(int value)
 	}
 }
 
-BigNumber BigNumber::modPow(int exp, const string modul)
+BigNumber BigNumber::modPow(short int exp, const string modul)
 {
 	
 	if (modul == "1")
@@ -91,7 +91,7 @@ BigNumber & BigNumber::operator=(const BigNumber& other)
 
 BigNumber BigNumber::operator+(const BigNumber &other)
 {
-	vector<int> vectorResult;
+	vector<short int> vectorResult;
 		if (this->vectorNumber_.size() >= other.vectorNumber_.size())
 		{
 
@@ -149,7 +149,7 @@ BigNumber BigNumber::operator+(const BigNumber &other)
 
 BigNumber BigNumber::operator-(const BigNumber& other)
 {
-	vector<int> vectorResult(this->vectorNumber_.size(), 0);
+	vector<short int> vectorResult(this->vectorNumber_.size(), 0);
 	if (*this < other)
 	{
 		cout << "Substraction impossible" << endl;
@@ -198,7 +198,7 @@ BigNumber BigNumber::operator*(const BigNumber& other)
 {
 
 
-	vector<int> vectorResult(this->vectorNumber_.size() + other.vectorNumber_.size() + 1, 0);
+	vector<short int> vectorResult(this->vectorNumber_.size() + other.vectorNumber_.size() + 1, 0);
 	if (this->vectorNumber_.size() >= other.vectorNumber_.size())
 	{
 		for (size_t i = 0; i < other.vectorNumber_.size(); i++)
@@ -244,21 +244,21 @@ BigNumber BigNumber::operator/(const BigNumber& other)
  {
 	if (*this < other)
 	{
-		vector<int> vectorDIV(1, 0);
+		vector<short int> vectorDIV(1, 0);
 		BigNumber temp(vectorDIV);
 		return temp;
 	}
 	if (*this == other)
 	{
-		vector<int> vectorDIV(1, 1);
+		vector<short int> vectorDIV(1, 1);
 		BigNumber temp(vectorDIV);
 		return temp;
 	}
-	vector<int> vectorDIV(0);
-	vector<int> vectorDIVresult(0);
+	vector<short int> vectorDIV(0);
+	vector<short int> vectorDIVresult(0);
 	BigNumber temp(vectorDIV);
 	
-	vector<int>::iterator it = this->vectorNumber_.end();
+	vector<short int>::iterator it = this->vectorNumber_.end();
 	while (it!= this->vectorNumber_.begin())
 	{
 		while (temp < other)
@@ -266,7 +266,7 @@ BigNumber BigNumber::operator/(const BigNumber& other)
 			temp.vectorNumber_.insert(temp.vectorNumber_.begin() ,*--it);
 		}
 
-		int t = 0;
+		short int t = 0;
 		while (temp > other)
 		{
 			temp = temp - other;
@@ -289,15 +289,15 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 	}
 	if (*this == other)
 	{
-		vector<int> vectorDIV(1,0);
+		vector<short int> vectorDIV(1,0);
 		BigNumber temp(vectorDIV);
 		return temp;
 	}
-	vector<int> vectorDIV(0);
-	vector<int> vectorDIVresult(0);
+	vector<short int> vectorDIV(0);
+	vector<short int> vectorDIVresult(0);
 	BigNumber temp(vectorDIV);
 
-	vector<int>::iterator it = this->vectorNumber_.end();
+	vector<short int>::iterator it = this->vectorNumber_.end();
 	while (it != this->vectorNumber_.begin() )
 	{
 		while (temp < other && it != this->vectorNumber_.begin())
@@ -305,7 +305,7 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 			temp.vectorNumber_.insert(temp.vectorNumber_.begin(), *--it);
 		}
 
-		int t = 0;
+		short int t = 0;
 		while (temp > other)
 		{
 			temp = temp - other;
@@ -318,13 +318,13 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 	return temp;
 }
 
-BigNumber BigNumber::operator*(int value)
+BigNumber BigNumber::operator*(short int value)
 {
 	if (value < 0 || value > 9)
 	{
 		return *this;
 	}
-		vector<int> vectorResult(this->vectorNumber_.size() + 2, 0);
+		vector<short int> vectorResult(this->vectorNumber_.size() + 2, 0);
 				for (size_t i = 0; i < this->vectorNumber_.size(); i++)
 					vectorResult[i] = vectorResult[i] + value * this->vectorNumber_[i];
 

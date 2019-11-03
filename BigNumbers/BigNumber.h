@@ -4,7 +4,7 @@ class BigNumber
 {
 public:
 	explicit BigNumber(const string str);
-	explicit BigNumber(const vector<int> vectorNum): vectorNumber_(vectorNum) {};
+	explicit BigNumber(const vector<short int> vectorNum): vectorNumber_(vectorNum) {};
 	~BigNumber();
 
 	BigNumber(const BigNumber& other) : vectorNumber_(other.vectorNumber_) {};
@@ -20,7 +20,7 @@ public:
 
 	BigNumber operator %(const BigNumber& other);
 
-	BigNumber operator*(int value);
+	BigNumber operator*(short int value);
 
 	BigNumber & operator--();
 
@@ -40,12 +40,12 @@ public:
 	void showVector();
 	void showNumber();
 
-	void toPower(int value);
+	void toPower(short int value);
 
-	BigNumber modPow(int exp, const string modul);
+	BigNumber modPow(short int exp, const string modul);
 
 private:
-	vector <int> vectorNumber_;
+	vector <short int> vectorNumber_;
 };
 
 
