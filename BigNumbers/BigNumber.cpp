@@ -8,12 +8,27 @@ using namespace std;
 BigNumber::BigNumber(const string str)
 {
 	char number[1];
-	for (size_t i = str.length(); i != 0;)
+	if (str[0] == '-')
 	{
-		--i;
-		*number = str[i];
-		vectorNumber_.push_back(atoi(number));
+		negative_ = true;
+		for (size_t i = str.length(); i != 1;)
+		{
+			--i;
+			*number = str[i];
+			vectorNumber_.push_back(atoi(number));
+		}
 	}
+	else
+	{
+		negative_ = false;
+		for (size_t i = str.length(); i != 0;)
+		{
+			--i;
+			*number = str[i];
+			vectorNumber_.push_back(atoi(number));
+		}
+	}
+	
 }
 
 
@@ -39,6 +54,10 @@ void BigNumber::showNumber()
 {
 	vector <short int>::iterator itr = vectorNumber_.end();
 	cout << "Number: " << endl;
+	if (negative_)
+	{
+		cout << "-";
+	}
 	while (itr != vectorNumber_.begin())
 	{
 		cout << *--itr;
@@ -50,7 +69,7 @@ void BigNumber::showNumber()
 
 
 
-void BigNumber::toPower(short int value)
+void BigNumber::toPower(size_t value)
 {
 	BigNumber temp(*this);
 	for (size_t i = 1; i < value; i++)
@@ -85,12 +104,53 @@ BigNumber & BigNumber::operator=(const BigNumber& other)
 	if (this != &other)
 	{
 		this->vectorNumber_ = other.vectorNumber_;
+		this->negative_ = other.negative_;
 	}
 	return *this;
 }
 
 BigNumber BigNumber::operator+(const BigNumber &other)
 {
+	if (this->negative_ && other.negative_ == 0)
+	{
+		if (*this < other)
+		{
+			BigNumber temp1 = other;
+			BigNumber temp2 = *this;
+			temp1.negative_ = false;
+			temp2.negative_ = false;
+			BigNumber temp = temp1 - temp2;
+			temp.negative_ = false;
+			return temp;
+		}
+		BigNumber temp1 = other;
+		temp1.negative_ = false;
+		BigNumber temp2 = *this;
+		temp2.negative_ = false;
+		BigNumber temp = temp1 - temp2;
+		temp.negative_ = true;
+		return temp;
+	}
+	if (this->negative_==0 && other.negative_)
+	{
+		if (*this < other)
+		{
+			BigNumber temp1 = other;
+			temp1.negative_ = false;
+			BigNumber temp2 = *this;
+			temp2.negative_ = false;
+			BigNumber temp = temp1 - temp2;
+			temp.negative_ = true;
+			return temp;
+		}
+		BigNumber temp1 = other;
+		temp1.negative_ = false;
+		BigNumber temp2 = *this;
+		temp2.negative_ = false;
+		BigNumber temp = temp1 - temp2;
+		temp.negative_ = false;
+		return temp;
+	}
 	vector<short int> vectorResult;
 		if (this->vectorNumber_.size() >= other.vectorNumber_.size())
 		{
@@ -139,33 +199,64 @@ BigNumber BigNumber::operator+(const BigNumber &other)
 			}
 		}
 
-		if (vectorResult.back() == 0)
+		while (vectorResult.back() == 0)
+		{
+			if (vectorResult.size() == 1 && vectorResult[0] == 0)
+				break;
 			vectorResult.pop_back();
+		}
 
 		BigNumber temp(vectorResult);
 
+		temp.negative_ = (this->negative_ && other.negative_);
 		return temp;
 }
 
 BigNumber BigNumber::operator-(const BigNumber& other)
 {
-	vector<short int> vectorResult(this->vectorNumber_.size(), 0);
-	if (*this < other)
+	if (this->vectorNumber_[0] == 0 && this->vectorNumber_.size() == 1)
 	{
-		cout << "Substraction impossible" << endl;
-		return *this;
+		BigNumber temp = other;
+		temp.negative_ = !other.negative_;
+		return temp;
 	}
+	if (this->negative_ && other.negative_ == 0)
+	{
+		BigNumber temp1 = *this;
+		temp1.negative_ = 0;
+		BigNumber temp = temp1 + other;
+		temp.negative_ = 1;
+		return temp;
+	}
+	if (this->negative_ == 0 && other.negative_)
+	{
+		BigNumber temp1 = other;
+		temp1.negative_ = 0;
+		BigNumber temp = *this + temp1;
+		temp.negative_ = 0;
+		return temp;
 
+	}
+	
+	
 
 	BigNumber tempQ(*this);
+	BigNumber tempOther(other);
+	if (*this < other)
+	{
+		*this = other;
+		tempOther = tempQ;
+	}
+
+	vector<short int> vectorResult(this->vectorNumber_.size(), 0);
 
 	for (size_t i = 0; i < this->vectorNumber_.size(); i++)
 	{
-		if (i >= other.vectorNumber_.size())
+		if (i >= tempOther.vectorNumber_.size())
 			vectorResult[i] = this->vectorNumber_[i];
 		else
 		{
-			if (this->vectorNumber_[i] < other.vectorNumber_[i])
+			if (this->vectorNumber_[i] < tempOther.vectorNumber_[i])
 			{
 				size_t j = i + 1;
 				while (this->vectorNumber_[j] == 0)
@@ -177,7 +268,7 @@ BigNumber BigNumber::operator-(const BigNumber& other)
 				}
 			}
 
-			vectorResult[i] = this->vectorNumber_[i] - other.vectorNumber_[i];
+			vectorResult[i] = this->vectorNumber_[i] - tempOther.vectorNumber_[i];
 		}
 	}
 	for (size_t i = 0; i < vectorResult.size() - 1; i++)
@@ -187,10 +278,36 @@ BigNumber BigNumber::operator-(const BigNumber& other)
 	}
 
 	while (vectorResult.back() == 0)
+	{
+		if (vectorResult.size() == 1 && vectorResult[0] == 0)
+			break;
 		vectorResult.pop_back();
+	}
 
-	BigNumber temp(vectorResult);
 	*this = tempQ;
+	BigNumber temp(vectorResult);
+	
+	if (*this < other && this->negative_ && other.negative_)
+	{
+		temp.negative_ = 0;
+		return temp;
+	}
+	if (this->negative_ && other.negative_ && !(*this < other))
+	{
+		temp.negative_ = 1;
+		return temp;
+	}
+	if (*this < other && (this->negative_ || other.negative_))
+	{
+		temp.negative_ = 1;
+		return temp;
+	}
+	if (*this < other)
+	{
+		temp.negative_ = 1;
+		return temp;
+	}
+
 	return temp;
 }
 
@@ -232,9 +349,14 @@ BigNumber BigNumber::operator*(const BigNumber& other)
 	
 
 	while (vectorResult.back() == 0)
+	{
+		if (vectorResult.size() == 1 && vectorResult[0] == 0)
+			break;
 		vectorResult.pop_back();
+	}
 
 	BigNumber temp(vectorResult);
+	temp.negative_ = (this->negative_ != other.negative_);
 
 	return temp;
 
@@ -267,7 +389,7 @@ BigNumber BigNumber::operator/(const BigNumber& other)
 		}
 
 		short int t = 0;
-		while (temp > other)
+		while (temp >= other)
 		{
 			temp = temp - other;
 			t++;
@@ -306,7 +428,7 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 		}
 
 		short int t = 0;
-		while (temp > other)
+		while (temp >= other)
 		{
 			temp = temp - other;
 			t++;
@@ -335,8 +457,12 @@ BigNumber BigNumber::operator*(short int value)
 			}
 
 
-		while (vectorResult.back() == 0)
-			vectorResult.pop_back();
+			while (vectorResult.back() == 0)
+			{
+				if (vectorResult.size() == 1 && vectorResult[0] == 0)
+					break;
+				vectorResult.pop_back();
+			}
 
 		BigNumber temp(vectorResult);
 

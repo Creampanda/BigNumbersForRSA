@@ -35,10 +35,38 @@ void evkl(int a, int b)
 	cout << x << "  " << y << endl;
 }
 
+void evkl(BigNumber a, BigNumber b)
+{
+	static BigNumber x("0");
+	static BigNumber y ("1");
+	BigNumber temp(x);
+	BigNumber nul("0");
+	if (a == nul)
+	{
+		return;
+	}
+	BigNumber mod = b % a;
+	evkl(mod, a);
+	temp = x;
+	x = y - (b / a) * x;
+	y = temp;
+	x.showNumber();
+	y.showNumber();
+}
+
 int main()
 {
-	evkl(3, 9167368);
-	cout << -3055789 + 9167368;
+
+	evkl(33421, 214421);
+	BigNumber num1("33421");
+	BigNumber num2("214421");
+	evkl(num1, num2);
+	/*
+	BigNumber num1("-99");
+	BigNumber num2("-1");
+	BigNumber num3 = num1 - num2;
+	num3.showNumber();
+	*/
 	return 0;
 }
 
