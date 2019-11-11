@@ -379,13 +379,20 @@ BigNumber BigNumber::operator/(const BigNumber& other)
 	vector<short int> vectorDIV(0);
 	vector<short int> vectorDIVresult(0);
 	BigNumber temp(vectorDIV);
-	
+	int counter = 0;
 	vector<short int>::iterator it = this->vectorNumber_.end();
 	while (it!= this->vectorNumber_.begin())
 	{
+		counter = 0;
 		while (temp < other)
 		{
+			if(counter!=0)
+				vectorDIVresult.insert(vectorDIVresult.begin(), 0);
+
 			temp.vectorNumber_.insert(temp.vectorNumber_.begin() ,*--it);
+			++counter;
+			if (temp.vectorNumber_.back() == 0)
+				temp.vectorNumber_.pop_back();
 		}
 
 		short int t = 0;
@@ -418,13 +425,21 @@ BigNumber BigNumber::operator %(const BigNumber& other)
 	vector<short int> vectorDIV(0);
 	vector<short int> vectorDIVresult(0);
 	BigNumber temp(vectorDIV);
-
+	int counter = 0;
 	vector<short int>::iterator it = this->vectorNumber_.end();
 	while (it != this->vectorNumber_.begin() )
 	{
+		counter = 0;
 		while (temp < other && it != this->vectorNumber_.begin())
 		{
+			if (counter!=0)
+			{
+				vectorDIVresult.insert(vectorDIVresult.begin(), 0);
+			}
 			temp.vectorNumber_.insert(temp.vectorNumber_.begin(), *--it);
+			++counter;
+			if (temp.vectorNumber_.back() == 0)
+				temp.vectorNumber_.pop_back();
 		}
 
 		short int t = 0;

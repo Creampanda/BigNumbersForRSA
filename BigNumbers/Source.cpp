@@ -4,6 +4,8 @@
 #include "BigNumber.h"
 using namespace std;
 
+
+static BigNumber x("0");
 BigNumber gcd(BigNumber a, BigNumber b)
 {
 	BigNumber q = a / b;
@@ -35,9 +37,9 @@ void evkl(int a, int b)
 	cout << x << "  " << y << endl;
 }
 
-void evkl(BigNumber a, BigNumber b)
+void evkl(BigNumber & a, BigNumber & b)
 {
-	static BigNumber x("0");
+
 	static BigNumber y ("1");
 	BigNumber temp(x);
 	BigNumber nul("0");
@@ -57,16 +59,9 @@ void evkl(BigNumber a, BigNumber b)
 int main()
 {
 
-	evkl(33421, 214421);
-	BigNumber num1("33421");
-	BigNumber num2("214421");
+	BigNumber num1("3");
+	BigNumber num2("9167368");
 	evkl(num1, num2);
-	/*
-	BigNumber num1("-99");
-	BigNumber num2("-1");
-	BigNumber num3 = num1 - num2;
-	num3.showNumber();
-	*/
 	return 0;
 }
 
