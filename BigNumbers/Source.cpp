@@ -59,9 +59,7 @@ void evkl(BigNumber & a, BigNumber & b)
 int main()
 {
 
-	BigNumber num1("3");
-	BigNumber num2("9167368");
-	evkl(num1, num2);
+
 	return 0;
 }
 
