@@ -1,65 +1,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "BigNumber.h"
-using namespace std;
+#include "RSAfunc.h"
 
-
-static BigNumber x("0");
-BigNumber gcd(BigNumber a, BigNumber b)
-{
-	BigNumber q = a / b;
-	BigNumber r = a % b;
-	BigNumber nul("0");
-	while (r != nul)
-	{
-		a = b;
-		b = r;
-		q = a / b;
-		r = a % b;
-	}
-	return b;
-}
-
-void evkl(int a, int b)
-{
-	static int x = 0;
-	static int y = 1;
-	int temp;
-	if (a == 0)
-	{
-		return;
-	}
-	evkl(b%a, a);
-	temp = x;
-	x = y - (b / a) * x;
-	y = temp;
-	cout << x << "  " << y << endl;
-}
-
-void evkl(BigNumber & a, BigNumber & b)
-{
-
-	static BigNumber y ("1");
-	BigNumber temp(x);
-	BigNumber nul("0");
-	if (a == nul)
-	{
-		return;
-	}
-	BigNumber mod = b % a;
-	evkl(mod, a);
-	temp = x;
-	x = y - (b / a) * x;
-	y = temp;
-	x.showNumber();
-	y.showNumber();
-}
 
 int main()
 {
+	BigNumber message("42");
+	encryption(message);
 
 
+
+	
 	return 0;
 }
 

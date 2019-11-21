@@ -41,8 +41,10 @@ public:
 	void showNumber();
 
 	void toPower(size_t value);
+	
+	bool getNegativity();
 
-	BigNumber modPow(short int exp, const string modul);
+	BigNumber modPow(BigNumber& grade, BigNumber& modul);
 
 private:
 	vector <short int> vectorNumber_;

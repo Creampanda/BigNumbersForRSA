@@ -3,6 +3,7 @@
 #include <vector>
 #include "BigNumber.h"
 
+
 using namespace std;
 
 BigNumber::BigNumber(const string str)
@@ -53,7 +54,6 @@ void BigNumber::showVector()
 void BigNumber::showNumber()
 {
 	vector <short int>::iterator itr = vectorNumber_.end();
-	cout << "Number: " << endl;
 	if (negative_)
 	{
 		cout << "-";
@@ -78,21 +78,27 @@ void BigNumber::toPower(size_t value)
 	}
 }
 
-BigNumber BigNumber::modPow(short int exp, const string modul)
+bool BigNumber::getNegativity()
+{
+	return negative_;
+}
+
+BigNumber BigNumber::modPow(BigNumber& grade, BigNumber& modul)
 {
 	
-	if (modul == "1")
-	{
-		BigNumber temp("0");
-		return temp;
-	}
 	BigNumber temp("1");
-	BigNumber modl(modul);
-	for (size_t i = 0; i != exp ; i++)
+	if (modul == temp)
+	{
+		return --temp;
+	}
+	BigNumber zero("0");
+	BigNumber one("1");
+	while (grade != zero)
 	{
 		temp = (temp * (*this));
-		if (temp > modl)
-			temp = temp % modl;
+		if (temp > modul)
+			temp = temp % modul;
+		grade = grade - one;
 	}
 	return temp;
 }
@@ -384,13 +390,16 @@ BigNumber BigNumber::operator/(const BigNumber& other)
 	while (it!= this->vectorNumber_.begin())
 	{
 		counter = 0;
-		while (temp < other)
+		while (temp < other && it != this->vectorNumber_.begin())
 		{
 			if(counter!=0)
 				vectorDIVresult.insert(vectorDIVresult.begin(), 0);
-
-			temp.vectorNumber_.insert(temp.vectorNumber_.begin() ,*--it);
-			++counter;
+			
+			if (it != this->vectorNumber_.begin())
+			{
+				temp.vectorNumber_.insert(temp.vectorNumber_.begin(), *--it);
+				++counter;
+			}
 			if (temp.vectorNumber_.back() == 0)
 				temp.vectorNumber_.pop_back();
 		}
@@ -404,6 +413,12 @@ BigNumber BigNumber::operator/(const BigNumber& other)
 		vectorDIVresult.insert(vectorDIVresult.begin(),t);
 
 
+	}
+	while (vectorDIVresult.back() == 0)
+	{
+		if (vectorDIVresult.size() == 1 && vectorDIVresult[0] == 0)
+			break;
+		vectorDIVresult.pop_back();
 	}
 	BigNumber temp2(vectorDIVresult);
 
