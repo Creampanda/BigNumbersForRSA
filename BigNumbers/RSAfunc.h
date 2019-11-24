@@ -7,5 +7,9 @@ void evkl(BigNumber& a, BigNumber& b, BigNumber& d);
 // Генерация простых чисел
 string getSimple();
 string getSimple(int a);
-BigNumber getExp(BigNumber & phi);
-void encryption(BigNumber & message);
+BigNumber getExp(const BigNumber & phi);
+void encryption(vector <string> symNums);
+vector <string> getNums();
+void decryption(BigNumber d,BigNumber n, BigNumber c);
+
+void decryption();

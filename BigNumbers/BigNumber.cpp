@@ -83,7 +83,7 @@ bool BigNumber::getNegativity()
 	return negative_;
 }
 
-BigNumber BigNumber::modPow(BigNumber& grade, BigNumber& modul)
+BigNumber BigNumber::modPow(BigNumber grade, BigNumber modul)
 {
 	
 	BigNumber temp("1");
@@ -114,6 +114,7 @@ BigNumber & BigNumber::operator=(const BigNumber& other)
 	}
 	return *this;
 }
+
 
 BigNumber BigNumber::operator+(const BigNumber &other)
 {

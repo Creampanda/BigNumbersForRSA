@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <time.h>
+#include <fstream>
 #include "RSAfunc.h"
 
 
@@ -58,7 +59,7 @@ string getSimple(int a)
 	return simpleNumbers[rand() % 22];
 }
 
-BigNumber getExp(BigNumber &phi)
+BigNumber getExp(const BigNumber &phi)
 {
 	BigNumber exp = phi;
 	--exp;
@@ -73,8 +74,11 @@ BigNumber getExp(BigNumber &phi)
 	return exponents[rand() % exponents.size()];
 }
 
-void encryption(BigNumber & message)
+//Ôóíêöèÿ øèôğîâàíèÿ
+void encryption(vector <string> symNums)
 {
+	ofstream fout;
+	fout.open("ciphertext.txt");
 	BigNumber p(getSimple());
 	BigNumber q = p;
 	while (q == p)
@@ -101,13 +105,68 @@ void encryption(BigNumber & message)
 	evkl(exp, phi, d);
 	cout << "Your number d:" << endl;
 	d.showNumber();
-	BigNumber m = message;
-	cout << "Your message:" << endl;
-	m.showNumber();
-	BigNumber c = m.modPow(exp, n);
-	cout << "Your ciphertext:" << endl;
-	c.showNumber();
-	BigNumber x = c.modPow(d, n);
-	cout << "Your message:" << endl;
-	x.showNumber();
+	vector <string>::iterator it = symNums.begin();
+	BigNumber previous("0");
+	while (it != symNums.end())
+	{
+		BigNumber m(*it++);
+		cout << "m:";
+		m.showNumber();
+		BigNumber c = m.modPow(exp, n);
+		previous = c + m;
+		/*cout << "Your ciphertext:" << endl;
+		c.showNumber();
+	}*/
+};
+
+//Ïåğåâîäèì áóêâû â öèôğû äëÿ äàëüíåéøåãî øèôğîâàíèÿ
+vector <string> getNums() 
+{
+	ifstream fin("message.txt");
+	if (!fin.is_open())
+	{
+		cout << "Cant open" << endl;
+	}
+	string message;
+	getline(fin, message);
+	string symbols = "#56789ASDFGHJKLQWERTYUIOPZXCVBNM01234, .!?:ÊÅÍÃÌÈÒÇÂÀÏĞÎËÄÆß×ÑÜÁŞÕÚİÔÛØÙÉÖÓ";
+	vector <string> symNums;
+	char sym[1];
+	for (size_t i = 0; i != message.length(); ++i)
+	{
+		*sym = message[i];
+		for (size_t j = 1; j != symbols.length(); ++j)
+		{
+			if (*sym == symbols[j])
+			{
+				symNums.push_back(to_string(j));
+			}
+		}
+	}
+	fin.close();
+	return symNums;
+}
+
+void decryption(BigNumber d, BigNumber n,BigNumber c)
+{
+	BigNumber message = c.modPow(d, n);
+	cout << "Text message:" << endl;
+	message.showNumber();
+
+}
+
+void decryption()
+{
+	string str;
+	cout << "Enter d:" << endl;
+	cin >> str;
+	BigNumber d(str);
+	cout << "Enter n:" << endl;
+	cin >> str;
+	BigNumber n(str);
+	cout << "Enter c (or 0 to exit):" << endl;
+	cin >> str;
+	BigNumber c(str);
+	BigNumber message = c.modPow(d, n);
+	message.showNumber();
 };

@@ -3,13 +3,15 @@ using namespace std;
 class BigNumber
 {
 public:
-	explicit BigNumber(const string str);
-	explicit BigNumber(const vector<short int> vectorNum, const bool negative = 0): vectorNumber_(vectorNum), negative_(negative) {};
+	BigNumber(const string str);
+	BigNumber(const vector<short int> vectorNum, const bool negative = 0): vectorNumber_(vectorNum), negative_(negative) {};
 	~BigNumber();
 
 	BigNumber(const BigNumber& other) : vectorNumber_(other.vectorNumber_), negative_(other.negative_) {};
 
 	BigNumber & operator=(const BigNumber& other);
+
+
 
 	BigNumber operator+(const BigNumber& other);
 	BigNumber operator-(const BigNumber& other);
@@ -44,7 +46,7 @@ public:
 	
 	bool getNegativity();
 
-	BigNumber modPow(BigNumber& grade, BigNumber& modul);
+	BigNumber modPow(BigNumber grade, BigNumber modul);
 
 private:
 	vector <short int> vectorNumber_;
