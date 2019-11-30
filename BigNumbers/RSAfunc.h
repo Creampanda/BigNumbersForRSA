@@ -8,8 +8,9 @@ void evkl(BigNumber& a, BigNumber& b, BigNumber& d);
 string getSimple();
 string getSimple(int a);
 BigNumber getExp(const BigNumber & phi);
-void encryption(vector <string> symNums);
-vector <string> getNums();
+void getKeys();
+vector <string> getNums(string message);
 void decryption(BigNumber d,BigNumber n, BigNumber c);
-
+string getMessage();
 void decryption();
+void writeIn(BigNumber num);

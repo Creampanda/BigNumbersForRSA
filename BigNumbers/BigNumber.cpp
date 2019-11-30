@@ -62,8 +62,8 @@ void BigNumber::showNumber()
 	{
 		cout << *--itr;
 	}
-	cout << endl;
 }
+
 
 
 
@@ -101,6 +101,11 @@ BigNumber BigNumber::modPow(BigNumber grade, BigNumber modul)
 		grade = grade - one;
 	}
 	return temp;
+}
+
+vector<short int> BigNumber::getVector()
+{
+	return vectorNumber_;
 }
 
 

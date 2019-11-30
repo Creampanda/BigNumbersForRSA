@@ -7,22 +7,9 @@
 
 int main()
 {
+	BigNumber num1("-1242152130523");
 
-
-
-	vector <string> symNums = getNums();
-	vector <string>::iterator it = symNums.begin();
-	while (it != symNums.end())
-	{
-		cout << *it++ << endl;
-	}
-	encryption(symNums);
-
-
-
-	
+	writeIn(num1);
 	
 	return 0;
 }
-
--

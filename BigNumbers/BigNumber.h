@@ -48,6 +48,7 @@ public:
 
 	BigNumber modPow(BigNumber grade, BigNumber modul);
 
+	vector <short int> getVector();
 private:
 	vector <short int> vectorNumber_;
 	bool negative_;

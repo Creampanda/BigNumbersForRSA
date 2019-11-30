@@ -5,7 +5,7 @@
 #include <fstream>
 #include "RSAfunc.h"
 
-
+// Функция НОД
 BigNumber gcd(BigNumber a, BigNumber b)
 {
 	BigNumber q = a / b;
@@ -23,6 +23,7 @@ BigNumber gcd(BigNumber a, BigNumber b)
 
 
 static BigNumber x("0");
+// Расширенный алгоритм Евклида для нахождения обратной экспоненты
 void evkl(BigNumber& a, BigNumber& b, BigNumber& d)
 {
 
@@ -44,21 +45,22 @@ void evkl(BigNumber& a, BigNumber& b, BigNumber& d)
 		d = b + x;
 	}
 }
-
+//Получить простое число
 string getSimple()
 {
-	vector <string> simpleNumbers = { "3", "5", "7", "11", "13", "17", "19", "23", "29", "31", "37", "41", "43", "47", "53", "59", "61", "67", "71", "83", "89", "97"};
+	vector <string> simpleNumbers = { "11", "13", "17", "19", "23", "29", "31", "37", "41", "43", "47", "53", "59", "61", "67", "71", "83", "89", "97"};
 	srand(time(NULL));
-	return simpleNumbers[rand() % 22];
+	return simpleNumbers[rand() % 19];
 }
 
 string getSimple(int a)
 {
-	vector <string> simpleNumbers = { "3", "5", "7", "11", "13", "17", "19", "23", "29", "31", "37", "41", "43", "47", "53", "59", "61", "67", "71", "83", "89", "97" };
+	vector <string> simpleNumbers = { "11", "13", "17", "19", "23", "29", "31", "37", "41", "43", "47", "53", "59", "61", "67", "71", "83", "89", "97" };
 	srand(a);
-	return simpleNumbers[rand() % 22];
+	return simpleNumbers[rand() % 19];
 }
 
+//Получить экспоненту
 BigNumber getExp(const BigNumber &phi)
 {
 	BigNumber exp = phi;
@@ -74,11 +76,9 @@ BigNumber getExp(const BigNumber &phi)
 	return exponents[rand() % exponents.size()];
 }
 
-//Функция шифрования
-void encryption(vector <string> symNums)
+//Функция генерации ключей
+void getKeys()
 {
-	ofstream fout;
-	fout.open("ciphertext.txt");
 	BigNumber p(getSimple());
 	BigNumber q = p;
 	while (q == p)
@@ -86,49 +86,29 @@ void encryption(vector <string> symNums)
 		BigNumber temp(getSimple());
 		q = temp;
 	}
-	cout << "Your number p:" << endl;
-	p.showNumber();
-	cout << "Your number q:" << endl;
-	q.showNumber();
 	BigNumber n = p * q;
-	cout << "Your number n:" << endl;
-	n.showNumber();
 	BigNumber phi = --p * --q;
-	cout << "Your number phi:" << endl;
-	phi.showNumber();
-	++p;
-	++q;
 	BigNumber exp = getExp(phi);
-	cout << "Your number exp:" << endl;
-	exp.showNumber();
 	BigNumber d("1");
 	evkl(exp, phi, d);
-	cout << "Your number d:" << endl;
+	cout << "Public key (e,n): (";
+	exp.showNumber();
+	cout << ", ";
+	n.showNumber();
+	cout << ")" << endl;
+	cout << "Private key (d,n): (";
 	d.showNumber();
-	vector <string>::iterator it = symNums.begin();
-	BigNumber previous("0");
-	while (it != symNums.end())
-	{
-		BigNumber m(*it++);
-		cout << "m:";
-		m.showNumber();
-		BigNumber c = m.modPow(exp, n);
-		previous = c + m;
-		/*cout << "Your ciphertext:" << endl;
-		c.showNumber();
-	}*/
-};
+	cout << ", ";
+	n.showNumber();
+	cout << ")" << endl;
+
+}
+
+
 
 //Переводим буквы в цифры для дальнейшего шифрования
-vector <string> getNums() 
+vector <string> getNums(string message)
 {
-	ifstream fin("message.txt");
-	if (!fin.is_open())
-	{
-		cout << "Cant open" << endl;
-	}
-	string message;
-	getline(fin, message);
 	string symbols = "#56789ASDFGHJKLQWERTYUIOPZXCVBNM01234, .!?:КЕНГМИТЗВАПРОЛДЖЯЧСЬБЮХЪЭФЫШЩЙЦУ";
 	vector <string> symNums;
 	char sym[1];
@@ -143,7 +123,6 @@ vector <string> getNums()
 			}
 		}
 	}
-	fin.close();
 	return symNums;
 }
 
@@ -170,3 +149,55 @@ void decryption()
 	BigNumber message = c.modPow(d, n);
 	message.showNumber();
 };
+
+string getMessage()
+{
+	ifstream fin;
+	fin.open("message.txt");
+	string message;
+	if (!fin.is_open())
+	{
+		cout << "Can't open 'message.txt.'" << endl;
+	}
+	else
+	{
+		cout << "'message.txt' is opened" << endl;
+		getline(fin, message);
+	}
+	for (size_t i = 0; i < message.length(); ++i)
+	{
+		message[i] = toupper(message[i]);
+	}
+	fin.close();
+	return message;
+}
+
+void writeIn(BigNumber num)
+{
+	ofstream fout;
+	fout.open("ciphertext.txt", ofstream::app);
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+		fout.open("ciphertext.txt");
+	}
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+	}
+	else
+	{
+		vector <short int> vectorNumber = num.getVector();
+		vector <short int>::iterator itr = vectorNumber.end();
+		if (num.getNegativity())
+		{
+			fout << "-";
+		}
+		while (itr != vectorNumber.begin())
+		{
+			fout << *--itr;
+		}
+		fout << endl;
+	}
+	fout.close();
+}
