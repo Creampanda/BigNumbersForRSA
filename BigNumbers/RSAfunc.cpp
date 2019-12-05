@@ -201,3 +201,56 @@ void writeIn(BigNumber num)
 	}
 	fout.close();
 }
+
+void encryption()
+{
+	string message = getMessage();
+	vector <string> messageNums = getNums(message);
+	
+	
+	string number;
+	cout << "Enter your public key" << endl;
+	cout << "Enter your e: ";
+	cin >> number;
+	BigNumber e(number);
+	cout << "Enter your n: ";
+	cin >> number;
+	BigNumber n(number);
+	ofstream fout;
+	fout.open("ciphertext.txt", ofstream::trunc);
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+		fout.open("ciphertext.txt");
+	}
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+	}
+	else
+	{
+		vector <string>::iterator it = messageNums.begin();
+		BigNumber previous("0");
+		while (it != messageNums.end())
+		{
+			BigNumber m(*it++);
+			BigNumber c = (m + previous).modPow(e, n);
+			previous = c;
+			vector <short int> vectorNumber = c.getVector();
+			vector <short int>::iterator itr = vectorNumber.end();
+			if (c.getNegativity())
+			{
+				fout << "-";
+			}
+			while (itr != vectorNumber.begin())
+			{
+				fout << *--itr;
+			}
+			fout << endl;
+		}
+		cout << endl << "Your message was successfully encrypted!" << endl;
+	}
+	fout.close();
+
+
+}
