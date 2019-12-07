@@ -22,7 +22,7 @@ BigNumber gcd(BigNumber a, BigNumber b)
 }
 
 
-static BigNumber x("0");
+BigNumber x("0");
 // Расширенный алгоритм Евклида для нахождения обратной экспоненты
 void evkl(BigNumber& a, BigNumber& b, BigNumber& d)
 {
@@ -101,7 +101,6 @@ void getKeys()
 	cout << ", ";
 	n.showNumber();
 	cout << ")" << endl;
-
 }
 
 
@@ -126,29 +125,6 @@ vector <string> getNums(string message)
 	return symNums;
 }
 
-void decryption(BigNumber d, BigNumber n,BigNumber c)
-{
-	BigNumber message = c.modPow(d, n);
-	cout << "Text message:" << endl;
-	message.showNumber();
-
-}
-
-void decryption()
-{
-	string str;
-	cout << "Enter d:" << endl;
-	cin >> str;
-	BigNumber d(str);
-	cout << "Enter n:" << endl;
-	cin >> str;
-	BigNumber n(str);
-	cout << "Enter c (or 0 to exit):" << endl;
-	cin >> str;
-	BigNumber c(str);
-	BigNumber message = c.modPow(d, n);
-	message.showNumber();
-};
 
 string getMessage()
 {
@@ -161,7 +137,6 @@ string getMessage()
 	}
 	else
 	{
-		cout << "'message.txt' is opened" << endl;
 		getline(fin, message);
 	}
 	for (size_t i = 0; i < message.length(); ++i)
@@ -234,7 +209,8 @@ void encryption()
 		while (it != messageNums.end())
 		{
 			BigNumber m(*it++);
-			BigNumber c = (m + previous).modPow(e, n);
+			BigNumber c = m;
+			c = c.modPow(e, n);
 			previous = c;
 			vector <short int> vectorNumber = c.getVector();
 			vector <short int>::iterator itr = vectorNumber.end();
@@ -249,8 +225,120 @@ void encryption()
 			fout << endl;
 		}
 		cout << endl << "Your message was successfully encrypted!" << endl;
+		cout << "*check 'ciphertext.txt'" << endl;
 	}
 	fout.close();
+}
 
+void decryption()
+{
+	ifstream fin;
+	fin.open("ciphertext.txt");
+	
+	if (!fin.is_open())
+	{
+		cout << "Can't open 'ciphertext.txt.'" << endl;
+	}
+	else
+	{
+		vector <BigNumber> numVector;
+		string num;
+		while (!fin.eof())
+		{
+			getline(fin, num);
+			BigNumber bNum(num);
+			numVector.push_back(bNum);
+		}
+		vector <BigNumber>::iterator it = numVector.begin();
+		cout << "Enter your private key" << endl;
+		cout << "Enter your d: ";
+		cin >> num;
+		BigNumber d(num);
+		cout << "Enter your n: ";
+		cin >> num;
+		BigNumber n(num);
+		string symbols = "#56789ASDFGHJKLQWERTYUIOPZXCVBNM01234, .!?:КЕНГМИТЗВАПРОЛДЖЯЧСЬБЮХЪЭФЫШЩЙЦУ";
+		string str = "";
+		vector <string> strVector;
+		vector <BigNumber> numVector2;
+		while (it != numVector.end())
+		{
+			numVector2.push_back(*it);
+			*it = it->modPow(d, n);
+			it++;
+		}
 
+		it = numVector.begin();
+		vector <BigNumber>::iterator it2 = numVector2.begin();
+		while (it != numVector.end() - 1)
+		{
+			++it;
+			*it = *it;
+			++it2;
+		}
+
+		it = numVector.begin();
+		while (it != numVector.end())
+		{
+			vector <short int> numArr = it++->getVector();
+			vector <short int>::iterator it2 = numArr.end();
+			while (it2 != numArr.begin())
+			{
+				str += to_string(*--it2);
+			}
+			strVector.push_back(str);
+			str = "";
+		}
+
+		
+
+		vector <string>::iterator itstr = strVector.begin();
+		ofstream fout;
+		fout.open("plaintext.txt", ofstream::trunc);
+		if (!fout.is_open())
+		{
+			cout << "Error opening file" << endl;
+			fout.open("plaintext.txt");
+		}
+		if (!fout.is_open())
+		{
+			cout << "Error opening file" << endl;
+		}
+		else
+		{
+			while (itstr != strVector.end() - 1)
+			{
+				fout << symbols[stoi(*itstr++)];
+			}
+		}
+
+		cout << endl << "Your message was successfully decrypted!" << endl;
+		cout << "*check 'plaintext.txt'" << endl;
+		fin.close();
+		fout.close();
+	}
+}
+
+void createNewMessage()
+{
+	ofstream fout;
+	fout.open("message.txt", ofstream::trunc);
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+		fout.open("message.txt");
+	}
+	if (!fout.is_open())
+	{
+		cout << "Error opening file" << endl;
+	}
+	else
+	{
+		string str;
+		cout << "Enter your message:" << endl;
+		getline(cin, str);
+		fout << str;
+		fout.close();
+		cout << "Your message was written!" << endl << "*check 'message.txt'" << endl;
+	}
 }

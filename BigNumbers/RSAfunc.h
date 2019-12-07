@@ -13,9 +13,11 @@ BigNumber getExp(const BigNumber & phi);
 void getKeys();
 //Функция перевода букв в числа
 vector <string> getNums(string message);
-void decryption(BigNumber d,BigNumber n, BigNumber c);
 string getMessage();
-void decryption();
 //Записать число в файл
 void writeIn(BigNumber num);
+//Функция шифрования
 void encryption();
+//Функция дешифровки
+void decryption();
+void createNewMessage();

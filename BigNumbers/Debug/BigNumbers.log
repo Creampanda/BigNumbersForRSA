@@ -1,5 +1,2 @@
-﻿  RSAfunc.cpp
-  Source.cpp
-  Создание кода...
-F:\MyProjects\С++\BigNumbers\BigNumbers\RSAfunc.cpp(52,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+﻿  Source.cpp
   BigNumbers.vcxproj -> F:\MyProjects\С++\BigNumbers\Debug\BigNumbers.exe
